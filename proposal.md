@@ -32,24 +32,48 @@ Since GraphQL isn’t tied to a specific backend, the implementation of GraphQL 
 
 A common problem for GraphQL libraries is unoptimized query execution because of the lack of assumptions that can be made about data and the associations. As an example the following GraphQL query can easily produce N+1 queries when using a relational database as the backend. These kind of problems are likely fairly easy to identify as a developer but also should be detectable by a Query Planner.
 
-```
-GraphQL
+<table>
+  <tr>
+  <td>GraphQL</td>
+  <td>
+
+```graphql
 query {
- products(first: 3) {
-  image {
-   src
+  products(first: 3) {
+    image {
+      src
+    }
   }
- }
 }
-N+1 Queries
+```
+
+  </td>
+  </tr>
+  <tr>
+  <td>N+1 Queries</td>
+  <td>
+
+```sql
 SELECT id FROM products LIMIT 3;
 SELECT src FROM images WHERE product_id = 1;
 SELECT src FROM images WHERE product_id = 2;
 SELECT src FROM images WHERE product_id = 3;
-Optimized Query
+```
+
+  </td>
+  </tr>
+  <tr>
+  <td>Optimized Queries</td>
+  <td>
+
+```sql
 SELECT id FROM products LIMIT 3;
 SELECT src FROM images WHERE product_id IN (1, 2, 3);
 ```
+
+  </td>
+  </tr>
+</table>
 
 ## Description
 
@@ -57,29 +81,58 @@ SELECT src FROM images WHERE product_id IN (1, 2, 3);
 
 The first step to building out this feature is to build out test cases for how we want the feature to perform. The first case would be a simple query like the one above and the basic details about it, like what queries will be made. A test environment with mysql or a similar relational database should be set up so that we can execute the test cases.
 
-```
+<table>
+  <tr>
+  <td>
+
+```ruby
 MySchema.plan(query_string, context: ctx)
-[
- {
-  engine: 'mysql',
-  field: 'products(first: 3)',
-  query: 'SELECT id FROM products LIMIT 3;'
- },
- {
-  engine: 'mysql',
-  field: 'image { src }',
-  query: 'SELECT src FROM images WHERE product_id IN (1, 2, 3);'
- }
-]
 ```
+
+  </td>
+  </tr>
+  <tr>
+  <td>
+
+```graphql
+query {
+  products(first: 3) {
+    image {
+      src
+    }
+  }
+}
+```
+
+  </td>
+  </tr>
+</table>
 
 Later on more complicated cases should be set up, e.g. identifying which indexes are being used, queries with multiple backends, supporting different types of backends.
 
 ### Web App
 
-```
+<table>
+  <tr>
+  <td>
+
+```ruby
 OptimizedSchema.plan(query_string)
+```
+
+  </td>
+  <td>
+
+```ruby
 BadSchema.plan(query_string)
+```
+
+  </td>
+  </tr>
+  <tr>
+  <td>
+
+```ruby
 [
  {
   engine: 'mysql',
@@ -92,6 +145,12 @@ BadSchema.plan(query_string)
   query: 'SELECT src FROM images WHERE product_id IN (1, 2, 3);'
  }
 ]
+```
+
+  </td>
+  <td>
+
+```ruby
 [
  {
   engine: 'mysql',
@@ -114,25 +173,11 @@ BadSchema.plan(query_string)
   query: 'SELECT src FROM images WHERE product_id = 3;'
  }
 ]
-
-Collection.products.each do |product|
- Image = product.image
- Puts image.src
-End
-
-Collection.products.preload(:image).each do |product|
- Image = product.image
- Puts image.src
-End
-
-{
-  Collection {
-    products(first: 3) {
-      image { src }
-    }
-  }
-}
 ```
+
+  </td>
+  </tr>
+</table>
 
 ## Timetable / Outline
 
