@@ -215,3 +215,5 @@ Potential need for server hosting for testing integration with an application in
 [2] https://github.com/Shopify/graphql-batch
 
 [3] https://facebook.github.io/graphql
+
+[4] [Google Doc](https://docs.google.com/document/d/1fun70FFe5heoWo8c3EdgCStcaAxJa-5wjn2Mg0Ahwhc/edit?usp=sharing)
