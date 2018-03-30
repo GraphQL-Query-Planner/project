@@ -1,6 +1,8 @@
 # GraphQL Query Planner + App
 
-[Report](https://docs.google.com/document/d/1fun70FFe5heoWo8c3EdgCStcaAxJa-5wjn2Mg0Ahwhc/edit?usp=sharing)
+
+[Final Report](https://docs.google.com/document/d/1tvsw2EKT-tW9YmmiZe-gWHYUTwgANBruaA8AIpEa2fQ/edit?usp=sharing)
+[Draft Report](https://docs.google.com/document/d/1fun70FFe5heoWo8c3EdgCStcaAxJa-5wjn2Mg0Ahwhc/edit?usp=sharing)
 
 Members:
 
